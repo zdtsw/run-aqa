@@ -254,32 +254,7 @@ function getTestJdkHome(version, jdksource) {
 // This function is an alternative of extra install step in workflow or alternative install action. This could also be implemented as github action
 function installDependencyAndSetup() {
     return __awaiter(this, void 0, void 0, function* () {
-        if (IS_WINDOWS) {
-            const cygwinPath = 'C:\\cygwin64';
-            try {
-                if (!fs.existsSync(cygwinPath)) {
-                    core.info(`if the cygwin exist?`);
-                    yield io.mkdirP('C:\\cygwin64');
-                    yield io.mkdirP('C:\\cygwin_packages');
-                    yield tc.downloadTool('https://cygwin.com/setup-x86_64.exe', 'C:\\temp\\cygwin.exe');
-                    yield exec.exec(`C:\\temp\\cygwin.exe  --packages wget,bsdtar,rsync,gnupg,git,autoconf,make,gcc-core,mingw64-x86_64-gcc-core,unzip,zip,cpio,curl,grep,perl --quiet-mode --download --local-install
-        --delete-orphans --site  https://mirrors.kernel.org/sourceware/cygwin/
-        --local-package-dir "C:\\cygwin_packages"
-        --root "C:\\cygwin64"`);
-                    yield exec.exec(`C:/cygwin64/bin/git config --system core.autocrlf false`);
-                    core.addPath(`C:\\cygwin64\\bin`);
-                }
-            }
-            catch (error) {
-                if (error instanceof Error) {
-                    core.warning(error.message);
-                }
-            }
-            const antContribFile = yield tc.downloadTool(`https://sourceforge.net/projects/ant-contrib/files/ant-contrib/ant-contrib-1.0b2/ant-contrib-1.0b2-bin.zip/download`);
-            yield tc.extractZip(`${antContribFile}`, `${tempDirectory}`);
-            yield io.cp(`${tempDirectory}/ant-contrib/lib/ant-contrib.jar`, `${process.env.ANT_HOME}\\lib`);
-        }
-        else if (process.platform === 'darwin') {
+        if (process.platform === 'darwin') {
             yield exec.exec('brew install ant-contrib');
             yield exec.exec('sudo sysctl -w kern.sysv.shmall=655360');
             yield exec.exec('sudo sysctl -w kern.sysv.shmmax=125839605760');
