@@ -11,6 +11,10 @@ jobs:
       matrix:
         os: [windows-latest]
     steps:
+    - name: Disable WSLv1
+      run: |
+        Disable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+      shell: pwsh
     - uses: actions/checkout@v3
     - name: AQA
       uses: ./

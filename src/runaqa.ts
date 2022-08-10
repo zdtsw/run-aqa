@@ -173,7 +173,40 @@ function getTestJdkHome(version: string, jdksource: string): string {
 
 // This function is an alternative of extra install step in workflow or alternative install action. This could also be implemented as github action
 async function installDependencyAndSetup(): Promise<void> {
-  if (process.platform === 'darwin') {
+  if (IS_WINDOWS) {
+    const cygwinPath = 'C:\\cygwin64'
+    try {
+      if (!fs.existsSync(cygwinPath)) {
+        core.info(`if the cygwin exist?`)
+        await io.mkdirP('C:\\cygwin64')
+        await io.mkdirP('C:\\cygwin_packages')
+        await tc.downloadTool(
+          'https://cygwin.com/setup-x86_64.exe',
+          'C:\\temp\\cygwin.exe'
+        )
+        await exec.exec(`C:\\temp\\cygwin.exe  --packages wget,bsdtar,rsync,gnupg,git,autoconf,make,gcc-core,mingw64-x86_64-gcc-core,unzip,zip,cpio,curl,grep,perl --quiet-mode --download --local-install
+        --delete-orphans --site  https://mirrors.kernel.org/sourceware/cygwin/
+        --local-package-dir "C:\\cygwin_packages"
+        --root "C:\\cygwin64"`)
+        await exec.exec(
+          `C:/cygwin64/bin/git config --system core.autocrlf false`
+        )
+        core.addPath(`C:\\cygwin64\\bin`)
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        core.warning(error.message)
+      }
+    }
+    const antContribFile = await tc.downloadTool(
+      `https://sourceforge.net/projects/ant-contrib/files/ant-contrib/ant-contrib-1.0b2/ant-contrib-1.0b2-bin.zip/download`
+    )
+    await tc.extractZip(`${antContribFile}`, `${tempDirectory}`)
+    await io.cp(
+      `${tempDirectory}/ant-contrib/lib/ant-contrib.jar`,
+      `${process.env.ANT_HOME}\\lib`
+    )
+  } else if (process.platform === 'darwin') {
     await exec.exec('brew install ant-contrib')
     await exec.exec('sudo sysctl -w kern.sysv.shmall=655360')
     await exec.exec('sudo sysctl -w kern.sysv.shmmax=125839605760')
