@@ -4,27 +4,6 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 jobs:
-  openjdk-on-windows: # make sure build/ci work properly
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest]
-    steps:
-    - uses: Vampire/setup-wsl@v1
-      with:
-        distribution: Ubuntu-20.04
-        additional-packages:
-          ant
-          make
-    - uses: actions/checkout@v3
-    - name: AQA
-      uses: ./
-      with: 
-        version: '11'
-        jdksource: 'github-hosted'
-        build_list: 'openjdk'
-        target: '_jdk_custom'
   system-on-windows:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -52,3 +31,4 @@ jobs:
         jdksource: 'install-jdk'
         build_list: 'system'
         target: '_DaaLoadTest_daa1_5m'
+        aqa_testRepo: 'adoptium/aqa-tests:v0.9.0'
