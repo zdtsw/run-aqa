@@ -31,4 +31,4 @@ jobs:
         jdksource: 'install-jdk'
         build_list: 'system'
         target: '_DaaLoadTest_daa1_5m'
-        aqa_testRepo: 'adoptium/aqa-tests:v0.9.0'
+        aqa-testsRepo: 'adoptium/aqa-tests:v0.9.0'
