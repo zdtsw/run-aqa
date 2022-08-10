@@ -11,10 +11,9 @@ jobs:
       matrix:
         os: [windows-latest]
     steps:
-    - name: Disable WSLv1
-      run: |
-        Disable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
-      shell: pwsh
+    - uses: Vampire/setup-wsl@v1
+      with:
+        distribution: Ubuntu-20.04
     - uses: actions/checkout@v3
     - name: AQA
       uses: ./
