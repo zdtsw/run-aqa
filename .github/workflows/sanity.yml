@@ -1,7 +1,8 @@
 name: "nightly sanity test"
 on:
-  schedule:
-    - cron:  '30 20 * * 1-5'
+  push:
+    branches:
+      - zdtsw/chore_2
 
 jobs:
   sanity-on-nonwindows:
