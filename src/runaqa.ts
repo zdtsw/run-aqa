@@ -177,21 +177,9 @@ async function installDependencyAndSetup(): Promise<void> {
     const cygwinPath = 'C:\\cygwin64'
     try {
       if (!fs.existsSync(cygwinPath)) {
-        core.info(`if the cygwin exist?`)
-        await io.mkdirP('C:\\cygwin64')
-        await io.mkdirP('C:\\cygwin_packages')
-        await tc.downloadTool(
-          'https://cygwin.com/setup-x86_64.exe',
-          'C:\\temp\\cygwin.exe'
-        )
-        await exec.exec(`C:\\temp\\cygwin.exe  --packages wget,bsdtar,rsync,gnupg,git,autoconf,make,gcc-core,mingw64-x86_64-gcc-core,unzip,zip,cpio,curl,grep,perl --quiet-mode --download --local-install
-        --delete-orphans --site  https://mirrors.kernel.org/sourceware/cygwin/
-        --local-package-dir "C:\\cygwin_packages"
-        --root "C:\\cygwin64"`)
         await exec.exec(
           `C:/cygwin64/bin/git config --system core.autocrlf false`
         )
-        core.addPath(`C:\\cygwin64\\bin`)
       }
     } catch (error) {
       if (error instanceof Error) {

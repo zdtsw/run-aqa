@@ -24,6 +24,11 @@ jobs:
         targets: 'JDK_11'
         impl: 'openj9'
         source: 'nightly'
+    - name: Set up Cygwin
+      uses: egor-tensin/setup-cygwin@v3
+      with:
+        packages: wget bsdtar rsync gnupg git autoconf make gcc-core mingw64-x86_64-gcc-core unzip zip cpio curl grep perl
+        install-dir: C:\cygwin64\bin
     - name: AQA
       uses: ./
       with: 
@@ -31,4 +36,4 @@ jobs:
         jdksource: 'install-jdk'
         build_list: 'system'
         target: '_DaaLoadTest_daa1_5m'
-        aqa-testsRepo: 'adoptium/aqa-tests:v0.9.0'
+   #     aqa-testsRepo: 'adoptium/aqa-tests:v0.9.0'
